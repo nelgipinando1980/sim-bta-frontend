@@ -10,84 +10,184 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Admin
-    if (username === "admin" && password === "admin123") {
-      localStorage.setItem("role", "admin");
-      navigate("/admin");
-    }
+    const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    // Pengajar
-    else if (username === "pengajar" && password === "pengajar123") {
-      localStorage.setItem("role", "pengajar");
-      navigate("/admin");
-    }
+    const user = users.find(
+      (u) =>
+        u.username === username &&
+        u.password === password
+    );
 
-    // Pimpinan
-    else if (username === "pimpinan" && password === "pimpinan123") {
-      localStorage.setItem("role", "pimpinan");
-      navigate("/admin");
-    }
-
-    else {
+    if (!user) {
       alert("Username atau Password salah!");
+      return;
     }
+
+    localStorage.setItem("role", user.role);
+    localStorage.setItem("nama", user.nama);
+
+    navigate("/admin");
   };
 
   return (
     <div
       style={{
-        width: "350px",
-        margin: "100px auto",
-        padding: "20px",
-        border: "1px solid #ccc",
-        borderRadius: "10px",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background:
+          "linear-gradient(135deg,#0f766e,#16a34a,#22c55e)",
       }}
     >
-      <h2 align="center">Login SIM BTA</h2>
+      <div
+        style={{
+          width: "400px",
+          background: "#fff",
+          borderRadius: "20px",
+          padding: "35px",
+          boxShadow: "0 15px 35px rgba(0,0,0,.25)",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "25px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "60px",
+            }}
+          >
+            📖
+          </div>
 
-      <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: "15px" }}>
-          <label>Username</label>
+          <h2
+            style={{
+              color: "#065f46",
+              margin: 0,
+            }}
+          >
+            SIM BTA
+          </h2>
+
+          <p
+            style={{
+              color: "#666",
+            }}
+          >
+            Sistem Informasi Baca Tulis Al-Qur'an
+          </p>
+        </div>
+
+        <form onSubmit={handleLogin}>
+          <label
+            style={{
+              fontWeight: "bold",
+            }}
+          >
+            Username
+          </label>
+
           <input
             type="text"
             placeholder="Masukkan Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
+            onChange={(e) =>
+              setUsername(e.target.value)
+            }
+            style={{
+              width: "100%",
+              padding: "12px",
+              marginTop: "5px",
+              marginBottom: "15px",
+              borderRadius: "10px",
+              border: "1px solid #ccc",
+              boxSizing: "border-box",
+            }}
           />
-        </div>
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Password</label>
+          <label
+            style={{
+              fontWeight: "bold",
+            }}
+          >
+            Password
+          </label>
+
           <input
             type="password"
             placeholder="Masukkan Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+            style={{
+              width: "100%",
+              padding: "12px",
+              marginTop: "5px",
+              marginBottom: "20px",
+              borderRadius: "10px",
+              border: "1px solid #ccc",
+              boxSizing: "border-box",
+            }}
           />
-        </div>
 
-        <button
-          type="submit"
+          <button
+            type="submit"
+            style={{
+              width: "100%",
+              padding: "13px",
+              background: "#16a34a",
+              color: "white",
+              border: "none",
+              borderRadius: "10px",
+              fontWeight: "bold",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            Login
+          </button>
+        </form>
+
+        <hr
           style={{
-            width: "100%",
-            padding: "10px",
-            backgroundColor: "green",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
+            margin: "25px 0",
+          }}
+        />
+
+        <div
+          style={{
+            textAlign: "center",
           }}
         >
-          Login
-        </button>
-      </form>
+          <p
+            style={{
+              color: "#666",
+            }}
+          >
+            Belum punya akun?
+          </p>
 
-      <hr />
-
-      <p><b>Admin</b> : admin / admin123</p>
-      <p><b>Pengajar</b> : pengajar / pengajar123</p>
-      <p><b>Pimpinan</b> : pimpinan / pimpinan123</p>
+          <button
+            onClick={() => navigate("/register")}
+            style={{
+              width: "100%",
+              padding: "12px",
+              border: "2px solid #16a34a",
+              background: "white",
+              color: "#16a34a",
+              borderRadius: "10px",
+              fontWeight: "bold",
+              cursor: "pointer",
+            }}
+          >
+            Buat Akun
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

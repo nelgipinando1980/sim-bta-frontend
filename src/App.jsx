@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import Dashboard from "./admin/Dashboard";
 import Jadwal from "./admin/Jadwal";
+import Register from "./pages/Register";
 
 function Home() {
   return (
@@ -34,7 +35,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/jadwal" element={<Jadwal />} />
-        
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
