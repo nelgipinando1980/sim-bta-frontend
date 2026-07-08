@@ -1,137 +1,161 @@
 import React, { useState } from 'react';
+import logoUnuha from "../assets/cropped-LOGO-UNUHA.png";
 
-function Chart() {
-  const [activeBar, setActiveBar] = useState(null);
-
-  const chartData = [
-    { month: "Jan", height: "40%", value: "40%" },
-    { month: "Feb", height: "55%", value: "55%" },
-    { month: "Mar", height: "45%", value: "45%" },
-    { month: "Apr", height: "70%", value: "70%" },
-    { month: "Mei", height: "85%", value: "85%" },
-    { month: "Jun", height: "100%", value: "100%" },
-  ];
+function AboutUniversity() {
+  const [hoveredBtn, setHoveredBtn] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState(false);
 
   return (
     <div
+      onMouseEnter={() => setHoveredCard(true)}
+      onMouseLeave={() => setHoveredCard(false)}
       style={{
         flex: 1,
-        background: "linear-gradient(145deg, #f5f8f6 0%, #ebf1ee 100%)", // Soft Eucalyptus Tint
+        // EFEK GLASSMORPHISM PREMIUM: Latar transparan dengan blur tingkat tinggi
+        background: hoveredCard
+          ? "rgba(255, 255, 255, 0.25)"
+          : "rgba(255, 255, 255, 0.15)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
         borderRadius: "32px",
-        padding: "40px",
-        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.01)",
-        border: "1px solid #e2ece7",
+        padding: "40px 35px",
+        // GARIS TEPI (STROKE) GLASSMORPHISM TRANSPARAN TRICK
+        border: hoveredCard 
+          ? "1px solid rgba(255, 255, 255, 0.4)" 
+          : "1px solid rgba(255, 255, 255, 0.2)",
+        // BAYANGAN HALUS YANG MENGIKUTI TEMA HIJAU KAMPUS
+        boxShadow: hoveredCard 
+          ? "0 30px 60px rgba(4, 41, 22, 0.12), inset 0 1px 0 rgba(255,255,255,0.4)" 
+          : "0 15px 35px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255,255,255,0.2)",
         fontFamily: "'Inter', sans-serif",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        textAlign: "left",
+        transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+        minHeight: "440px",
+        boxSizing: "border-box",
+        position: "relative",
+        overflow: "hidden"
       }}
     >
-      <div>
-        {/* Bagian Judul */}
-        <div style={{ marginBottom: "35px" }}>
-          <h2 style={{ color: "#042916", fontSize: "21px", fontWeight: "700", margin: "0 0 8px 0", letterSpacing: "-0.5px" }}>
-            Grafik Kelulusan
-          </h2>
-          <p style={{ color: "#475569", margin: 0, fontSize: "13.5px", fontWeight: "400" }}>
-            Peningkatan tingkat kelulusan program BTA selama 6 bulan terakhir.
+      {/* GLOW EFFECT: Gradasi cahaya hijau tersembunyi di pojok latar belakang */}
+      <div style={{
+        position: "absolute",
+        top: "-80px",
+        right: "-80px",
+        width: "200px",
+        height: "200px",
+        background: "radial-gradient(circle, rgba(11, 122, 62, 0.15) 0%, rgba(255,255,255,0) 70%)",
+        borderRadius: "50%",
+        pointerEvents: "none",
+        transform: hoveredCard ? "scale(1.2)" : "scale(1)",
+        transition: "transform 0.6s ease"
+      }} />
+
+      <div style={{ width: "100%", zIndex: 2 }}>
+        {/* Header Logo & Judul */}
+        <div style={{ display: "flex", alignItems: "center", gap: "18px", marginBottom: "26px" }}>
+          <div 
+            style={{ 
+              width: "64px", 
+              height: "64px", 
+              background: "rgba(255, 255, 255, 0.8)",
+              borderRadius: "18px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 8px 20px rgba(4, 41, 22, 0.06)",
+              border: "1px solid rgba(255, 255, 255, 0.5)",
+              flexShrink: 0,
+              transform: hoveredCard ? "translateY(-4px) rotate(-3deg)" : "none",
+              transition: "all 0.5s ease"
+            }}
+          >
+            <img 
+              src={logoUnuha} 
+              alt="Logo Universitas Nurul Huda" 
+              style={{ width: "46px", height: "46px", objectFit: "contain" }} 
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.parentNode.innerHTML = '<span style="font-size:24px">🏫</span>';
+              }}
+            />
+          </div>
+          <div>
+            <span style={{ color: "#0b7a3e", fontSize: "11px", fontWeight: "700", letterSpacing: "1.5px", textTransform: "uppercase" }}>
+              Profil Utama
+            </span>
+            <h3 style={{ color: "#042916", fontSize: "22px", fontWeight: "800", margin: "2px 0 0 0", letterSpacing: "-0.5px" }}>
+              Universitas Nurul Huda
+            </h3>
+          </div>
+        </div>
+
+        {/* Teks Paragraf Narasi */}
+        <div style={{ color: "#3e4d46", fontSize: "13.5px", lineHeight: "1.65", fontWeight: "400" }}>
+          <p style={{ margin: "0 0 14px 0" }}>
+            <strong>Universitas Nurul Huda (UNUHA)</strong> hadir sebagai pilar perguruan tinggi modern yang secara harmonis mengintegrasikan inovasi sains-teknologi mutakhir dengan keluhuran peradaban religius. 
+          </p>
+          <p style={{ margin: "0 0 24px 0" }}>
+            Berdiri kokoh di atas komitmen inklusivitas, kami mendedikasikan lingkungan akademik hijau ini untuk membina generasi unggul, memacu riset berdampak, serta mencetak talenta masa depan yang berjiwa pemimpin dan adaptif di era digital global.
           </p>
         </div>
 
-        {/* Kontainer Grafik */}
-        <div style={{ display: "flex", gap: "20px", height: "230px", alignItems: "stretch", position: "relative" }}>
-          
-          {/* Sumbu Y */}
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", color: "#64748b", fontSize: "11.5px", fontWeight: "600", paddingBottom: "35px", textAlign: "right", width: "35px" }}>
-            <span>100%</span>
-            <span>50%</span>
-            <span>0%</span>
+        {/* Statistik/Fakta Kampus dengan Desain Minimalis Transparan */}
+        <div style={{ 
+          display: "flex", 
+          gap: "30px", 
+          padding: "16px 0", 
+          borderTop: "1px solid rgba(11, 122, 62, 0.08)",
+          borderBottom: "1px solid rgba(11, 122, 62, 0.08)",
+          marginBottom: "28px"
+        }}>
+          <div>
+            <div style={{ color: "#0b7a3e", fontSize: "16px", fontWeight: "700", letterSpacing: "0.5px" }}>Terakreditasi</div>
+            <div style={{ color: "#52635c", fontSize: "11px", fontWeight: "500", marginTop: "2px" }}>Resmi BAN-PT</div>
           </div>
-
-          {/* Canvas Batang */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", position: "relative" }}>
-            
-            {/* Garis Grid Latar Belakang */}
-            <div style={{ position: "absolute", width: "100%", height: "calc(100% - 35px)", top: 0, left: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", pointerEvents: "none" }}>
-              <div style={{ borderTop: "1px dashed rgba(11, 122, 62, 0.08)", width: "100%" }}></div>
-              <div style={{ borderTop: "1px dashed rgba(11, 122, 62, 0.08)", width: "100%" }}></div>
-              <div style={{ borderBottom: "2px solid #e2ece7", width: "100%" }}></div>
-            </div>
-
-            {/* Render Batang */}
-            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", height: "calc(100% - 35px)", padding: "0 10px", zIndex: 2 }}>
-              {chartData.map((item, idx) => {
-                const isBarHovered = activeBar === idx;
-                
-                return (
-                  <div
-                    key={idx}
-                    onMouseEnter={() => setActiveBar(idx)}
-                    onMouseLeave={() => setActiveBar(null)}
-                    style={{
-                      width: "34px",
-                      height: item.height,
-                      background: isBarHovered 
-                        ? "linear-gradient(to top, #0b7a3e, #10b981)" 
-                        : "linear-gradient(to top, #042916, #0b7a3e)",
-                      borderRadius: "10px 10px 0 0",
-                      transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-                      cursor: "pointer",
-                      position: "relative",
-                      boxShadow: isBarHovered ? "0 8px 16px rgba(11, 122, 62, 0.15)" : "none",
-                    }}
-                  >
-                    {/* Tooltip */}
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "-40px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        background: "#042916",
-                        color: "#ffffff",
-                        padding: "6px 10px",
-                        borderRadius: "8px",
-                        fontSize: "11px",
-                        fontWeight: "700",
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                        opacity: isBarHovered ? 1 : 0,
-                        visibility: isBarHovered ? "visible" : "hidden",
-                        transition: "all 0.2s ease",
-                        whiteSpace: "nowrap"
-                      }}
-                    >
-                      {item.value}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Label Sumbu X */}
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0 10px", height: "20px", alignItems: "center" }}>
-              {chartData.map((item, idx) => (
-                <span
-                  key={idx}
-                  style={{
-                    width: "34px",
-                    textAlign: "center",
-                    fontSize: "12.5px",
-                    fontWeight: "600",
-                    color: activeBar === idx ? "#0b7a3e" : "#94a3b8",
-                    transition: "color 0.3s ease",
-                  }}
-                >
-                  {item.month}
-                </span>
-              ))}
-            </div>
-
+          <div style={{ width: "1px", background: "rgba(11, 122, 62, 0.08)" }}></div>
+          <div>
+            <div style={{ color: "#0b7a3e", fontSize: "16px", fontWeight: "700", letterSpacing: "0.5px" }}>Fokus Masa Depan</div>
+            <div style={{ color: "#52635c", fontSize: "11px", fontWeight: "500", marginTop: "2px" }}>Kurikulum Berbasis IT</div>
           </div>
         </div>
       </div>
+
+      {/* Tombol Tautan Dengan Gaya Bold Solid */}
+      <a
+        href="https://unuha.ac.id" 
+        target="_blank"
+        rel="noopener noreferrer"
+        onMouseEnter={() => setHoveredBtn(true)}
+        onMouseLeave={() => setHoveredBtn(false)}
+        style={{
+          padding: "12px 28px",
+          background: hoveredBtn ? "#042916" : "#0b7a3e",
+          color: "#ffffff",
+          fontWeight: "600",
+          fontSize: "13.5px",
+          textDecoration: "none",
+          borderRadius: "100px",
+          boxShadow: hoveredBtn ? "0 15px 30px rgba(4, 41, 22, 0.2)" : "0 6px 16px rgba(11, 122, 62, 0.15)",
+          transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          transform: hoveredBtn ? "translateY(-3px)" : "translateY(0)",
+          zIndex: 2
+        }}
+      >
+        <span>Kunjungi Portal Resmi</span>
+        <span style={{ 
+          transform: hoveredBtn ? "translateX(4px)" : "none", 
+          transition: "transform 0.3s ease" 
+        }}>➔</span>
+      </a>
     </div>
   );
 }
 
-export default Chart;
+export default AboutUniversity;

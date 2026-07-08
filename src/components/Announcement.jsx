@@ -8,55 +8,50 @@ function Announcement() {
     {
       date: "01",
       month: "Mei",
-      title: "Pendaftaran BTA Gelombang II ",
+      title: "Pendaftaran BTA Gelombang II",
       desc: "Bagian administrasi resmi membuka pendaftaran gelombang kedua untuk mahasiswa angkatan 2023.",
-      bg: "#ffffff", // Diubah jadi putih bersih agar kontras dengan background utama yang sudah berwarna
-      color: "#0b7a3e"
     },
     {
       date: "25",
       month: "Apr",
       title: "Ujian Kenaikan Tingkatan",
       desc: "Jadwal ujian tahsin dan tajwid berkala kini sudah dapat diakses oleh seluruh peserta.",
-      bg: "#ffffff",
-      color: "#0b7a3e"
     },
     {
       date: "20",
       month: "Apr",
       title: "Jadwal Semester Genap",
       desc: "Pembagian kelompok belajar intensif Al-Qur'an terbaru dapat dilihat melalui halaman utama.",
-      bg: "#fff5e0",
-      color: "#b45309"
-    }
+    },
   ];
 
   return (
     <div
       style={{
-        flex: 2, 
-        background: "#e8f0ec", // 🟢 WARNA BARU: Sage Green Pastel yang lembut dan estetik (bukan putih!)
-        borderRadius: "32px",
-        padding: "40px 35px",
-        boxShadow: "0 12px 30px rgba(4, 41, 22, 0.04)", 
-        border: "1px solid #d3e2db", // Border diselaraskan dengan warna dasar sage
+        flex: 2,
+        background: "#e8f0ec", // Sage Green Pastel tetap dipertahankan sebagai wadah utama
+        borderRadius: "28px",
+        padding: "35px 30px",
+        boxShadow: "0 10px 30px rgba(4, 41, 22, 0.03)",
+        border: "1px solid #d3e2db",
         fontFamily: "'Inter', sans-serif",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
       }}
     >
       <div>
-        {/* Header */}
+        {/* Header Bagian Atas */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "35px",
+            marginBottom: "25px",
+            padding: "0 4px",
           }}
         >
-          <h2 style={{ color: "#042916", fontSize: "22px", fontWeight: "700", margin: 0, letterSpacing: "-0.5px" }}>
+          <h2 style={{ color: "#042916", fontSize: "20px", fontWeight: "700", margin: 0, letterSpacing: "-0.5px" }}>
             Pengumuman Terbaru
           </h2>
 
@@ -65,59 +60,91 @@ function Announcement() {
             onMouseEnter={() => setHoveredLink(true)}
             onMouseLeave={() => setHoveredLink(false)}
             style={{
-              color: "#0B7A3E",
+              color: "#0b7a3e",
               fontWeight: "600",
-              fontSize: "14px",
+              fontSize: "13px",
               textDecoration: "none",
               transition: "all 0.3s ease",
-              borderBottom: hoveredLink ? "1px solid #0B7A3E" : "1px solid transparent",
-              paddingBottom: "2px"
+              opacity: hoveredLink ? 1 : 0.85,
+              transform: hoveredLink ? "translateY(-1px)" : "translateY(0)",
             }}
           >
-            Lihat Semua
+            Lihat Semua {hoveredLink ? "→" : ""}
           </a>
         </div>
 
-        {/* List Item */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        {/* List Card Item */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {dataAnnouncement.map((announcement, index) => {
             const isHovered = hoveredIdx === index;
 
             return (
-              <div 
+              <div
                 key={index}
                 onMouseEnter={() => setHoveredIdx(index)}
                 onMouseLeave={() => setHoveredIdx(null)}
                 style={{
-                  ...itemStyle,
-                  /* Efek Hover: Saat disentuh, item akan pop-up menjadi warna hijau yang sedikit lebih cerah */
-                  background: isHovered ? "#dbede4" : "transparent",
-                  transform: isHovered ? "translateX(6px)" : "translateX(0)",
-                  borderLeft: isHovered ? "4px solid #0B7A3E" : "4px solid transparent",
+                  display: "flex",
+                  gap: "16px",
+                  padding: "16px",
+                  borderRadius: "20px",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                  // Mengubah background menjadi putih bersih saat di-hover agar pop-out kontras
+                  background: isHovered ? "#ffffff" : "rgba(255, 255, 255, 0.3)",
+                  boxShadow: isHovered ? "0 12px 24px rgba(4, 41, 22, 0.06)" : "0 2px 4px rgba(0,0,0,0.01)",
+                  transform: isHovered ? "translateY(-4px)" : "translateY(0)",
+                  border: isHovered ? "1px solid rgba(11, 122, 62, 0.1)" : "1px solid transparent",
                 }}
               >
-                {/* Kotak Tanggal */}
-                <div style={{ ...dateBoxStyle, background: announcement.bg, color: announcement.color, boxShadow: "0 2px 8px rgba(0,0,0,0.02)" }}>
+                {/* Kotak Tanggal - Dibuat minimalis dan seragam */}
+                <div
+                  style={{
+                    width: "56px",
+                    height: "56px",
+                    borderRadius: "14px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexShrink: 0,
+                    background: isHovered ? "#0b7a3e" : "#ffffff",
+                    color: isHovered ? "#ffffff" : "#042916",
+                    border: "1px solid rgba(11, 122, 62, 0.05)",
+                    transition: "all 0.3s ease",
+                  }}
+                >
                   <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "800", lineHeight: "1.1" }}>
                     {announcement.date}
                   </h3>
-                  <small style={{ fontSize: "11px", fontWeight: "600", opacity: 0.8, textTransform: "uppercase", marginTop: "2px" }}>
+                  <small style={{ fontSize: "10px", fontWeight: "600", opacity: 0.8, textTransform: "uppercase", marginTop: "1px", letterSpacing: "0.5px" }}>
                     {announcement.month}
                   </small>
                 </div>
 
                 {/* Konten Teks */}
-                <div>
-                  <h4 style={{ 
-                    margin: "0 0 4px 0", 
-                    color: isHovered ? "#0B7A3E" : "#042916", 
-                    fontSize: "16px", 
-                    fontWeight: "600",
-                    transition: "color 0.2s ease"
-                  }}>
+                <div style={{ flex: 1 }}>
+                  <h4
+                    style={{
+                      margin: "0 0 4px 0",
+                      color: "#042916",
+                      fontSize: "15px",
+                      fontWeight: "600",
+                      transition: "color 0.2s ease",
+                    }}
+                  >
                     {announcement.title}
                   </h4>
-                  <p style={textStyle}>
+                  <p
+                    style={{
+                      color: "#52635c", // Warna teks dibuat abu-abu sage gelap agar kontrasnya nyaman di mata
+                      margin: 0,
+                      fontSize: "13px",
+                      lineHeight: "1.45",
+                      fontWeight: "400",
+                    }}
+                  >
                     {announcement.desc}
                   </p>
                 </div>
@@ -129,35 +156,5 @@ function Announcement() {
     </div>
   );
 }
-
-const itemStyle = {
-  display: "flex",
-  gap: "20px",
-  padding: "14px 12px",
-  borderRadius: "16px",
-  alignItems: "center",
-  transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-  cursor: "pointer",
-};
-
-const dateBoxStyle = {
-  width: "60px",
-  height: "60px",
-  borderRadius: "14px",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  flexShrink: 0,
-  transition: "all 0.3s ease",
-};
-
-const textStyle = {
-  color: "#2f3e46", // Dibikin lebih gelap sedikit dari aslinya agar kontras teksnya tajam di atas warna sage
-  margin: 0,
-  fontSize: "14px",
-  lineHeight: "1.5",
-  fontWeight: "400"
-};
 
 export default Announcement;
