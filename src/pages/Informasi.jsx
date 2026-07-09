@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 
 function Informasi() {
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [hoveredBtn, setHoveredBtn] = useState(null);
-  const [closeBtnHover, setCloseBtnHover] = useState(false);
-  
-  // FITUR UTAMA: State untuk menyimpan data pengumuman yang sedang aktif/diklik
+  // Hanya membutuhkan satu state utama untuk performa optimal
   const [selectedInfo, setSelectedInfo] = useState(null);
+  const [activeHover, setActiveHover] = useState({ cardId: null, btnId: null, closeBtn: false });
 
   const infoList = [
     {
@@ -42,129 +39,140 @@ function Informasi() {
   ];
 
   return (
-    <div style={{ padding: "40px 20px", fontFamily: "'Inter', sans-serif", maxWidth: "1200px", margin: "0 auto", boxSizing: "border-box" }}>
+    <div style={{ padding: "40px 24px", fontFamily: "'Inter', sans-serif", maxWidth: "1200px", margin: "0 auto", boxSizing: "border-box" }}>
       
       {/* Header Halaman */}
-      <div style={{ marginBottom: "30px", borderBottom: "2px solid #e2ece7", paddingBottom: "16px" }}>
-        <h2 style={{ color: "#042916", fontSize: "24px", fontWeight: "800", margin: 0, letterSpacing: "-0.5px" }}>
+      <div style={{ marginBottom: "35px", borderBottom: "1px solid #e2ece7", paddingBottom: "20px" }}>
+        <h2 style={{ color: "#042916", fontSize: "26px", fontWeight: "800", margin: 0, letterSpacing: "-0.5px" }}>
           Pusat Informasi & Pengumuman
         </h2>
-        <p style={{ color: "#52635c", margin: "4px 0 0 0", fontSize: "14px", fontWeight: "400" }}>
-          Klik pada salah satu info atau tombol untuk memunculkan detail pengumuman lengkap.
+        <p style={{ color: "#64748b", margin: "6px 0 0 0", fontSize: "14.5px", lineHeight: "1.5" }}>
+          Temukan berita terbaru, jadwal akademik, dan pengumuman resmi seputar bimbingan Al-Qur'an.
         </p>
       </div>
 
-      {/* Grid List Pengumuman */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px", width: "100%" }}>
+      {/* Grid List Pengumuman Modern (2 Kolom Dinamis di Layar Lebar) */}
+      <div style={{ 
+        display: "grid", 
+        gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", 
+        gap: "24px", 
+        width: "100%" 
+      }}>
         {infoList.map((item) => {
-          const isCardHovered = hoveredCard === item.id;
+          const isCardHovered = activeHover.cardId === item.id;
+          const isBtnHovered = activeHover.btnId === item.id;
+
           return (
             <div
               key={item.id}
-              onClick={() => setSelectedInfo(item)} // KETIKA DIKLIK: Mengaktifkan isi detail modal
-              onMouseEnter={() => setHoveredCard(item.id)}
-              onMouseLeave={() => setHoveredCard(null)}
+              onClick={() => setSelectedInfo(item)}
+              onMouseEnter={() => setActiveHover(prev => ({ ...prev, cardId: item.id }))}
+              onMouseLeave={() => setActiveHover(prev => ({ ...prev, cardId: null }))}
               style={{
                 background: "#ffffff",
-                borderRadius: "20px",
-                padding: "24px 30px",
-                border: isCardHovered ? "1px solid rgba(11, 122, 62, 0.3)" : "1px solid #e2ece7",
-                boxShadow: isCardHovered ? "0 15px 30px rgba(11, 122, 62, 0.05)" : "0 4px 12px rgba(0, 0, 0, 0.01)",
+                borderRadius: "16px",
+                padding: "28px",
+                border: "1px solid",
+                borderColor: isCardHovered ? "#0b7a3e" : "#e2ece7",
+                boxShadow: isCardHovered ? "0 12px 30px rgba(11, 122, 62, 0.08)" : "0 2px 8px rgba(0, 0, 0, 0.02)",
                 display: "flex",
                 flexDirection: "column",
-                gap: "14px",
-                transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-                transform: isCardHovered ? "translateY(-2px)" : "translateY(0)",
+                justifyContent: "space-between",
+                minHeight: "220px",
+                transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                transform: isCardHovered ? "translateY(-4px)" : "translateY(0)",
                 cursor: "pointer"
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <span style={{ background: item.tagBg, color: item.tagColor, fontSize: "11px", fontWeight: "700", padding: "4px 12px", borderRadius: "100px", textTransform: "uppercase" }}>
-                  {item.tag}
-                </span>
-                <span style={{ color: "#94a3b8", fontSize: "12.5px", fontWeight: "500" }}>
-                  📅 {item.date}
-                </span>
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "24px", flexWrap: "wrap" }}>
-                <div style={{ flex: 1, minWidth: "280px" }}>
-                  <h3 style={{ color: isCardHovered ? "#0b7a3e" : "#042916", fontSize: "17px", fontWeight: "700", margin: "0 0 8px 0", lineHeight: "1.4" }}>
-                    {item.title}
-                  </h3>
-                  <p style={{ color: "#4a5952", fontSize: "13px", lineHeight: "1.6", margin: 0 }}>
-                    {item.desc}
-                  </p>
+              <div>
+                {/* Meta Bar */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+                  <span style={{ background: item.tagBg, color: item.tagColor, fontSize: "11px", fontWeight: "700", padding: "4px 12px", borderRadius: "100px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                    {item.tag}
+                  </span>
+                  <span style={{ color: "#94a3b8", fontSize: "12px", fontWeight: "500", display: "flex", alignItems: "center", gap: "4px" }}>
+                    📅 {item.date}
+                  </span>
                 </div>
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // Biar klik tombol gak dobel triger ke div luar
-                    setSelectedInfo(item);
-                  }}
-                  onMouseEnter={() => setHoveredBtn(item.id)}
-                  onMouseLeave={() => setHoveredBtn(null)}
-                  style={{
-                    padding: "10px 20px",
-                    background: hoveredBtn === item.id ? "#042916" : "transparent",
-                    color: hoveredBtn === item.id ? "#ffffff" : "#0b7a3e",
-                    border: hoveredBtn === item.id ? "1px solid #042916" : "1px solid #0b7a3e",
-                    borderRadius: "100px",
-                    fontSize: "12.5px",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    alignSelf: "flex-end"
-                  }}
-                >
-                  <span>Baca Detail</span>
-                  <span>➔</span>
-                </button>
+                {/* Judul & Deskripsi */}
+                <h3 style={{ color: "#042916", fontSize: "17.5px", fontWeight: "700", margin: "0 0 10px 0", lineHeight: "1.45" }}>
+                  {item.title}
+                </h3>
+                <p style={{ color: "#475569", fontSize: "13.5px", lineHeight: "1.6", margin: "0 0 20px 0" }}>
+                  {item.desc}
+                </p>
               </div>
+
+              {/* Tombol Baca Detail */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedInfo(item);
+                }}
+                onMouseEnter={() => setActiveHover(prev => ({ ...prev, btnId: item.id }))}
+                onMouseLeave={() => setActiveHover(prev => ({ ...prev, btnId: null }))}
+                style={{
+                  padding: "10px 20px",
+                  background: isBtnHovered ? "#042916" : "transparent",
+                  color: isBtnHovered ? "#ffffff" : "#0b7a3e",
+                  border: "1px solid",
+                  borderColor: isBtnHovered ? "#042916" : "#0b7a3e",
+                  borderRadius: "12px",
+                  fontSize: "13px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  width: "100%"
+                }}
+              >
+                <span>Baca Selengkapnya</span>
+                <span style={{ transform: isBtnHovered ? "translateX(3px)" : "translateX(0)", transition: "transform 0.2s" }}>➔</span>
+              </button>
             </div>
           );
         })}
       </div>
 
-      {/* ==================== FITUR POPUP MODAL INTERAKTIF ==================== */}
+      {/* ==================== POPUP MODAL INTERAKTIF (PREMIUM GLASSMORPHISM) ==================== */}
       {selectedInfo && (
         <div 
-          onClick={() => setSelectedInfo(null)} // Tutup modal saat area transparan luar diklik
+          onClick={() => setSelectedInfo(null)}
           style={{
             position: "fixed",
             top: 0, left: 0, width: "100vw", height: "100vh",
-            background: "rgba(4, 41, 22, 0.4)", // Overlay gelap transparan beraksen hijau gelap
-            backdropFilter: "blur(8px)", // Efek Frosted Glass premium
-            WebkitBackdropFilter: "blur(8px)",
+            background: "rgba(4, 41, 22, 0.25)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            zIndex: 9999, // Supaya berada di lapisan paling atas layar
+            zIndex: 9999,
             padding: "20px",
             boxSizing: "border-box"
           }}
         >
-          {/* Konten Kotak Modal */}
+          {/* Kotak Modal */}
           <div 
-            onClick={(e) => e.stopPropagation()} // Supaya saat isi modal diklik gak ikutan ketutup
+            onClick={(e) => e.stopPropagation()}
             style={{
               background: "#ffffff",
-              borderRadius: "28px",
+              borderRadius: "24px",
               width: "100%",
-              maxWidth: "550px",
-              padding: "35px",
-              boxShadow: "0 30px 60px rgba(0,0,0,0.15)",
+              maxWidth: "520px",
+              padding: "32px",
+              boxShadow: "0 25px 50px -12px rgba(4, 41, 22, 0.25)",
               border: "1px solid #e2ece7",
-              position: "relative",
               display: "flex",
               flexDirection: "column",
-              gap: "16px",
+              gap: "20px",
               boxSizing: "border-box"
             }}
           >
             {/* Header Modal */}
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ background: selectedInfo.tagBg, color: selectedInfo.tagColor, fontSize: "11px", fontWeight: "700", padding: "4px 12px", borderRadius: "100px", textTransform: "uppercase" }}>
                 {selectedInfo.tag}
               </span>
@@ -173,37 +181,38 @@ function Informasi() {
               </span>
             </div>
 
-            {/* Judul & Isi Detail Lengkap */}
-            <h3 style={{ color: "#042916", fontSize: "19px", fontWeight: "800", margin: 0, lineHeight: "1.4" }}>
+            {/* Judul Detail */}
+            <h3 style={{ color: "#042916", fontSize: "20px", fontWeight: "800", margin: 0, lineHeight: "1.4" }}>
               {selectedInfo.title}
             </h3>
             
             <div style={{ width: "100%", height: "1px", background: "#f1f5f9" }} />
 
-            <p style={{ color: "#334155", fontSize: "14px", lineHeight: "1.6", margin: 0, fontWeight: "400" }}>
+            {/* Isi Konten Utama */}
+            <p style={{ color: "#334155", fontSize: "14.5px", lineHeight: "1.65", margin: 0, fontWeight: "400", textAlign: "justify" }}>
               {selectedInfo.detail}
             </p>
 
-            {/* Tombol Tutup / Close */}
+            {/* Tombol Tutup */}
             <button
               onClick={() => setSelectedInfo(null)}
-              onMouseEnter={() => setCloseBtnHover(true)}
-              onMouseLeave={() => setCloseBtnHover(false)}
+              onMouseEnter={() => setActiveHover(prev => ({ ...prev, closeBtn: true }))}
+              onMouseLeave={() => setActiveHover(prev => ({ ...prev, closeBtn: false }))}
               style={{
-                marginTop: "10px",
-                padding: "11px 0",
+                marginTop: "8px",
+                padding: "12px 0",
                 width: "100%",
-                background: closeBtnHover ? "#e2ece7" : "#f1f5f9",
-                color: "#475569",
+                background: activeHover.closeBtn ? "#e2ece7" : "#f1f5f9",
+                color: "#334155",
                 border: "none",
                 borderRadius: "12px",
-                fontSize: "13.5px",
+                fontSize: "14px",
                 fontWeight: "600",
                 cursor: "pointer",
-                transition: "background 0.2s"
+                transition: "background 0.2s ease"
               }}
             >
-              Tutup Pengumuman
+              Kembali ke Informasi
             </button>
           </div>
         </div>

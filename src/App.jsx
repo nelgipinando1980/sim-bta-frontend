@@ -8,12 +8,13 @@ import CardFeature from "./components/CardFeature";
 import Announcement from "./components/Announcement";
 import Chart from "./components/Chart";
 import Footer from "./components/Footer";
-import Informasi from "./pages/informasi"; // Sudah dipindah ke atas dengan aman
+import Informasi from "./pages/Informasi"; // Menyesuaikan nama file asli Informasi.jsx
 
 import Login from "./pages/Login";
 import Dashboard from "./admin/Dashboard";
 import Jadwal from "./admin/Jadwal";
 import Register from "./pages/Register";
+import Kontak from "./pages/bantuan"; // Memperbaiki rute import ke bantuan.jsx dengan benar
 
 // 2. BARU MASUK KE DEFINISI FUNGSI/KOMPONEN
 function Home() {
@@ -30,14 +31,26 @@ function Home() {
   );
 }
 
-// Jika ingin halaman /Informasi terlihat rapi dengan Navbar dan Footer, 
-// kamu bisa bungkus seperti ini (opsional, tapi sangat disarankan agar tidak polos):
+// Wrapper Layout Halaman Informasi agar konsisten ada Navbar/Footer
 function HalamanInformasi() {
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Navbar />
       <main style={{ flex: 1, background: "#fafafa" }}>
         <Informasi />
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+// 🌟 PERBAIKAN: Membuat fungsi HalamanBantuan yang sebelumnya hilang
+function HalamanBantuan() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <Navbar />
+      <main style={{ flex: 1, background: "#fafafa" }}>
+        <Kontak /> {/* Memanggil komponen Kontak dari file bantuan.jsx */}
       </main>
       <Footer />
     </div>
@@ -54,8 +67,9 @@ function App() {
         <Route path="/admin/jadwal" element={<Jadwal />} />
         <Route path="/register" element={<Register />} />
         
-        {/* Menggunakan HalamanInformasi agar layout tetap konsisten ada Navbar/Footer */}
-        <Route path="/Informasi" element={<HalamanInformasi />} />
+        {/* 🌟 SEKARANG SUDAH AMAN DAN BISA DIAKSES */}
+        <Route path="/bantuan" element={<HalamanBantuan />} />
+        <Route path="/informasi" element={<HalamanInformasi />} />
       </Routes>
     </BrowserRouter>
   );

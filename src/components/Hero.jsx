@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
+// Import useNavigate dari react-router-dom untuk sistem perpindahan halaman
+import { useNavigate } from "react-router-dom";
+
 // Pastikan gambar hero1 dan hero2 sudah ada di folder assets kamu
 import hero1 from "../assets/mahasiswa.jpeg"; 
 import hero2 from "../assets/KAMPUS A.jpg";
 
 function Hero() {
+  // Inisialisasi fungsi navigate
+  const navigate = useNavigate();
+
   const [hoverBtn1, setHoverBtn1] = useState(false);
   const [hoverBtn2, setHoverBtn2] = useState(false);
   const [hoverArrowLeft, setHoverArrowLeft] = useState(false);
@@ -36,7 +42,7 @@ function Hero() {
         justifyContent: "space-between",
         alignItems: "center",
         padding: "80px 60px",
-        background: "linear-gradient(135deg, #021f10 0%, #053e1f 50%, #0b7a3e 100%)", // Gradasi lebih kaya warna
+        background: "linear-gradient(135deg, #021f10 0%, #053e1f 50%, #0b7a3e 100%)",
         color: "#ffffff",
         borderRadius: "32px",
         boxShadow: "0 25px 60px rgba(4, 41, 22, 0.25)",
@@ -48,7 +54,7 @@ function Hero() {
         overflow: "hidden"
       }}
     >
-      {/* ELEMEN DEKORASI: Efek Cahaya Pijar (Aura Glow Background) */}
+      {/* ELEMEN DEKORASI */}
       <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "300px", height: "300px", borderRadius: "50%", background: "rgba(16, 185, 129, 0.15)", filter: "blur(60px)", zIndex: 1 }} />
       <div style={{ position: "absolute", bottom: "-100px", left: "-100px", width: "300px", height: "300px", borderRadius: "50%", background: "rgba(167, 243, 208, 0.1)", filter: "blur(60px)", zIndex: 1 }} />
 
@@ -70,7 +76,7 @@ function Hero() {
           style={{ 
             fontSize: "17px", 
             lineHeight: "1.65", 
-            color: "#cbd5e1", // Memakai warna abu soft agar teks utama lebih kontras dibaca
+            color: "#cbd5e1", 
             marginBottom: "40px",
             fontWeight: "400"
           }}
@@ -80,12 +86,14 @@ function Hero() {
         </p>
 
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+          {/* Tombol 1: Mulai Pendaftaran */}
           <button
+            onClick={() => navigate("/register")}
             onMouseEnter={() => setHoverBtn1(true)}
             onMouseLeave={() => setHoverBtn1(false)}
             style={{
               padding: "14px 32px",
-              background: hoverBtn1 ? "#10b981" : "#34d399", // Warna emerald cerah ceria
+              background: hoverBtn1 ? "#10b981" : "#34d399", 
               color: "#042916",
               fontWeight: "700",
               fontSize: "15.5px",
@@ -100,7 +108,9 @@ function Hero() {
             Mulai Pendaftaran
           </button>
 
+          {/* Tombol 2: Informasi (Diubah dari Lihat Jadwal) */}
           <button
+            onClick={() => navigate("/informasi")}
             onMouseEnter={() => setHoverBtn2(true)}
             onMouseLeave={() => setHoverBtn2(false)}
             style={{
@@ -116,7 +126,7 @@ function Hero() {
               transform: hoverBtn2 ? "translateY(-3px)" : "translateY(0)",
             }}
           >
-            Lihat Jadwal
+            Informasi
           </button>
         </div>
       </div>
@@ -193,7 +203,7 @@ function Hero() {
           ❯
         </button>
 
-        {/* Indikator Titik (Dots) di Bawah Gambar */}
+        {/* Indikator Titik (Dots) */}
         <div style={{ display: "flex", gap: "8px", marginTop: "24px" }}>
           {images.map((_, index) => (
             <div
@@ -216,7 +226,6 @@ function Hero() {
   );
 }
 
-// Style Dasar untuk Tombol Panah Slider
 const arrowStyleBase = {
   position: "absolute",
   top: "42%",

@@ -20,6 +20,7 @@ function Navbar() {
           gap: "30px",
           listStyle: "none",
           margin: 0,
+          padding: 0, // Ditambahkan agar tidak ada padding default dari browser
         }}
       >
         <li>
@@ -29,25 +30,27 @@ function Navbar() {
         </li>
 
         <li>
-          <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+          {/* PERBAIKAN: Diubah jadi huruf kecil "/informasi" agar pas dengan path di App.jsx */}
+          <Link to="/informasi" style={{ color: "white", textDecoration: "none" }}>
             Informasi
           </Link>
         </li>
 
         <li>
-          <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+          <Link to="/admin/jadwal" style={{ color: "white", textDecoration: "none" }}>
             Jadwal
           </Link>
         </li>
 
         <li>
-          <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+          <Link to="/register" style={{ color: "white", textDecoration: "none" }}>
             Daftar BTA
           </Link>
         </li>
 
         <li>
-          <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+          {/* 🌟 PERBAIKAN UTAMA: Mengubah to="#" menjadi to="/bantuan" */}
+          <Link to="/bantuan" style={{ color: "white", textDecoration: "none" }}>
             Bantuan
           </Link>
         </li>
@@ -62,6 +65,7 @@ function Navbar() {
             padding: "10px 20px",
             borderRadius: "8px",
             cursor: "pointer",
+            fontWeight: "600"
           }}
         >
           Login Admin
