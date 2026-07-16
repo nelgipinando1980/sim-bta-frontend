@@ -12,9 +12,10 @@ function Login() {
 
     const users = JSON.parse(localStorage.getItem("users")) || [];
 
+    // Menggunakan toLowerCase() agar pencarian username tidak sensitif huruf kapital
     const user = users.find(
       (u) =>
-        u.username === username &&
+        u.username.toLowerCase() === username.toLowerCase() &&
         u.password === password
     );
 
@@ -23,10 +24,24 @@ function Login() {
       return;
     }
 
+    // Simpan data login ke localStorage
     localStorage.setItem("role", user.role);
     localStorage.setItem("nama", user.nama);
 
-    navigate("/admin");
+    // Arahkan sesuai role masing-masing
+    if (user.role === "admin") {
+      navigate("/admin");
+    } else if (user.role === "pengajar") {
+      navigate("/pengajar");
+    } else if (user.role === "pimpinan") {
+      navigate("/pimpinan");
+    } else if (user.role === "mahasiswa") {
+      // Diarahkan ke Home (/) karena rute dashboard mahasiswa belum terdaftar di App.jsx
+      alert("Login Berhasil sebagai Mahasiswa!");
+      navigate("/");
+    } else {
+      alert("Role tidak dikenali!");
+    }
   };
 
   return (
@@ -36,8 +51,7 @@ function Login() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background:
-          "linear-gradient(135deg,#0f766e,#16a34a,#22c55e)",
+        background: "linear-gradient(135deg,#0f766e,#16a34a,#22c55e)",
       }}
     >
       <div
@@ -55,48 +69,20 @@ function Login() {
             marginBottom: "25px",
           }}
         >
-          <div
-            style={{
-              fontSize: "60px",
-            }}
-          >
-            📖
-          </div>
-
-          <h2
-            style={{
-              color: "#065f46",
-              margin: 0,
-            }}
-          >
-            SIM BTA
-          </h2>
-
-          <p
-            style={{
-              color: "#666",
-            }}
-          >
+          <div style={{ fontSize: "60px" }}>📖</div>
+          <h2 style={{ color: "#065f46", margin: 0 }}>SIM BTA</h2>
+          <p style={{ color: "#666" }}>
             Sistem Informasi Baca Tulis Al-Qur'an
           </p>
         </div>
 
         <form onSubmit={handleLogin}>
-          <label
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            Username
-          </label>
-
+          <label style={{ fontWeight: "bold" }}>Username</label>
           <input
             type="text"
             placeholder="Masukkan Username"
             value={username}
-            onChange={(e) =>
-              setUsername(e.target.value)
-            }
+            onChange={(e) => setUsername(e.target.value)}
             style={{
               width: "100%",
               padding: "12px",
@@ -108,21 +94,12 @@ function Login() {
             }}
           />
 
-          <label
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            Password
-          </label>
-
+          <label style={{ fontWeight: "bold" }}>Password</label>
           <input
             type="password"
             placeholder="Masukkan Password"
             value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e) => setPassword(e.target.value)}
             style={{
               width: "100%",
               padding: "12px",
@@ -152,25 +129,10 @@ function Login() {
           </button>
         </form>
 
-        <hr
-          style={{
-            margin: "25px 0",
-          }}
-        />
+        <hr style={{ margin: "25px 0" }} />
 
-        <div
-          style={{
-            textAlign: "center",
-          }}
-        >
-          <p
-            style={{
-              color: "#666",
-            }}
-          >
-            Belum punya akun?
-          </p>
-
+        <div style={{ textAlign: "center" }}>
+          <p style={{ color: "#666" }}>Belum punya akun?</p>
           <button
             onClick={() => navigate("/register")}
             style={{

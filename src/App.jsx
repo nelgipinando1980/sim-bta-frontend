@@ -1,6 +1,6 @@
-// 1. SEMUA IMPORT HARUS BERADA DI PALING ATAS FILE
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// HOME
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Stats from "./components/Stats";
@@ -8,15 +8,34 @@ import CardFeature from "./components/CardFeature";
 import Announcement from "./components/Announcement";
 import Chart from "./components/Chart";
 import Footer from "./components/Footer";
-import Informasi from "./pages/Informasi"; // Menyesuaikan nama file asli Informasi.jsx
 
+// PAGES
 import Login from "./pages/Login";
-import Dashboard from "./admin/Dashboard";
-import Jadwal from "./admin/Jadwal";
 import Register from "./pages/Register";
-import Kontak from "./pages/bantuan"; // Memperbaiki rute import ke bantuan.jsx dengan benar
+import Informasi from "./pages/Informasi";
+import Kontak from "./pages/Bantuan";
 
-// 2. BARU MASUK KE DEFINISI FUNGSI/KOMPONEN
+// ================= ADMIN =================
+import AdminDashboard from "./admin/Dashboard";
+import DataPeserta from "./admin/DataPeserta";
+import Jadwal from "./admin/Jadwal";
+import Verifikasi from "./admin/Verifikasi";
+import DataPengajar from "./admin/DataPengajar";
+import Pengumuman from "./admin/Pengumuman";
+
+// ================= PENGAJAR =================
+import PengajarDashboard from "./pengajar/Dashboard";
+import InputNilai from "./pengajar/InputNilai";
+import UpdateNilai from "./pengajar/UpdateNilai";
+import HapusNilai from "./pengajar/HapusNilai";
+// Import komponen baru khusus pengajar
+import DataPesertaPengajar from "./pengajar/DataPesertaPengajar"; 
+
+// ================= PIMPINAN =================
+import PimpinanDashboard from "./pimpinan/Dashboard";
+import Laporan from "./pimpinan/Laporan";
+import DownloadLaporan from "./pimpinan/DownloadLaporan";
+
 function Home() {
   return (
     <>
@@ -31,29 +50,23 @@ function Home() {
   );
 }
 
-// Wrapper Layout Halaman Informasi agar konsisten ada Navbar/Footer
 function HalamanInformasi() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <>
       <Navbar />
-      <main style={{ flex: 1, background: "#fafafa" }}>
-        <Informasi />
-      </main>
+      <Informasi />
       <Footer />
-    </div>
+    </>
   );
 }
 
-// 🌟 PERBAIKAN: Membuat fungsi HalamanBantuan yang sebelumnya hilang
 function HalamanBantuan() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <>
       <Navbar />
-      <main style={{ flex: 1, background: "#fafafa" }}>
-        <Kontak /> {/* Memanggil komponen Kontak dari file bantuan.jsx */}
-      </main>
+      <Kontak />
       <Footer />
-    </div>
+    </>
   );
 }
 
@@ -61,15 +74,37 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* HOME */}
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin" element={<Dashboard />} />
-        <Route path="/admin/jadwal" element={<Jadwal />} />
-        <Route path="/register" element={<Register />} />
-        
-        {/* 🌟 SEKARANG SUDAH AMAN DAN BISA DIAKSES */}
-        <Route path="/bantuan" element={<HalamanBantuan />} />
         <Route path="/informasi" element={<HalamanInformasi />} />
+        <Route path="/bantuan" element={<HalamanBantuan />} />
+
+        {/* LOGIN */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* ADMIN */}
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/peserta" element={<DataPeserta />} />
+        <Route path="/admin/verifikasi" element={<Verifikasi />} />
+        <Route path="/admin/jadwal" element={<Jadwal />} />
+        <Route path="/admin/pengajar" element={<DataPengajar />} />
+        <Route path="/admin/pengumuman" element={<Pengumuman />} />
+
+        {/* PENGAJAR */}
+        <Route path="/pengajar" element={<PengajarDashboard />} />
+        <Route path="/pengajar/input-nilai" element={<InputNilai />} />
+        <Route path="/pengajar/update-nilai" element={<UpdateNilai />} />
+        <Route path="/pengajar/hapus-nilai" element={<HapusNilai />} />
+        {/* Rute baru untuk tampilan khusus pengajar */}
+        <Route path="/pengajar/data-peserta" element={<DataPesertaPengajar />} />
+
+        {/* PIMPINAN */}
+        <Route path="/pimpinan" element={<PimpinanDashboard />} />
+        <Route path="/pimpinan/laporan" element={<Laporan />} />
+        <Route path="/pimpinan/download" element={<DownloadLaporan />} />
+
       </Routes>
     </BrowserRouter>
   );

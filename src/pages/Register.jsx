@@ -8,7 +8,7 @@ function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [konfirmasiPassword, setKonfirmasiPassword] = useState("");
-  const [role, setRole] = useState("pengajar");
+  const [role, setRole] = useState("mahasiswa");
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -25,7 +25,8 @@ function Register() {
 
     const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    const cek = users.find((u) => u.username === username);
+    // Cek dengan toLowerCase() agar tidak ada duplikasi username bertumpuk huruf besar/kecil
+    const cek = users.find((u) => u.username.toLowerCase() === username.toLowerCase());
 
     if (cek) {
       alert("Username sudah digunakan!");
@@ -42,7 +43,6 @@ function Register() {
     localStorage.setItem("users", JSON.stringify(users));
 
     alert("Registrasi Berhasil!");
-
     navigate("/login");
   };
 
@@ -53,8 +53,7 @@ function Register() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background:
-          "linear-gradient(135deg,#0f766e,#16a34a,#22c55e)",
+        background: "linear-gradient(135deg,#0f766e,#16a34a,#22c55e)",
       }}
     >
       <div
@@ -66,15 +65,16 @@ function Register() {
           boxShadow: "0 15px 35px rgba(0,0,0,.25)",
         }}
       >
-        <div style={{ textAlign: "center", marginBottom: "25px" }}>
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "25px",
+          }}
+        >
           <div style={{ fontSize: "60px" }}>📝</div>
-
-          <h2 style={{ color: "#065f46", margin: 0 }}>
-            Register SIM BTA
-          </h2>
-
+          <h2 style={{ color: "#065f46", margin: 0 }}>Register SIM BTA</h2>
           <p style={{ color: "#666" }}>
-            Buat akun untuk masuk ke sistem
+            Buat akun untuk masuk ke Sistem Informasi Baca Tulis Al-Qur'an
           </p>
         </div>
 
@@ -107,17 +107,28 @@ function Register() {
             type="password"
             placeholder="Konfirmasi Password"
             value={konfirmasiPassword}
-            onChange={(e) =>
-              setKonfirmasiPassword(e.target.value)
-            }
+            onChange={(e) => setKonfirmasiPassword(e.target.value)}
             style={inputStyle}
           />
+
+          <label
+            style={{
+              fontWeight: "bold",
+              color: "#065f46",
+              display: "block",
+              marginBottom: "8px",
+            }}
+          >
+            Pilih Role
+          </label>
 
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
             style={inputStyle}
           >
+            <option value="mahasiswa">🎓 Mahasiswa</option>
+            <option value="admin">👑 Admin</option>
             <option value="pengajar">👨‍🏫 Pengajar</option>
             <option value="pimpinan">🏢 Pimpinan</option>
           </select>
@@ -134,22 +145,15 @@ function Register() {
               fontWeight: "bold",
               fontSize: "16px",
               cursor: "pointer",
+              marginTop: "10px",
             }}
           >
             Daftar Sekarang
           </button>
         </form>
 
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "20px",
-          }}
-        >
-          <span style={{ color: "#666" }}>
-            Sudah punya akun?
-          </span>
-
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+          <span style={{ color: "#666" }}>Sudah punya akun?</span>
           <button
             type="button"
             onClick={() => navigate("/login")}

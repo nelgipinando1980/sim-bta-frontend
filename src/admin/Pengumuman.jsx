@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function Jadwal() {
+function Pengumuman() {
   const navigate = useNavigate();
   const [namaAdmin, setNamaAdmin] = useState("Admin");
 
-  // State membaca data langsung dari localStorage agar tersinkronisasi
-  const [jadwal, setJadwal] = useState(() => {
-    const dataLokal = localStorage.getItem("data_jadwal");
+  // State membaca data langsung dari localStorage agar tersinkronisasi dan tidak hilang saat refresh
+  const [pengumuman, setPengumuman] = useState(() => {
+    const dataLokal = localStorage.getItem("data_pengumuman");
     return dataLokal ? JSON.parse(dataLokal) : [];
   });
 
@@ -24,49 +24,45 @@ function Jadwal() {
   };
 
   const [form, setForm] = useState({
-    kelas: "",
-    pengajar: "",
-    hari: "",
-    jam: "",
-    ruangan: "",
+    judul: "",
+    isi: "",
+    tanggal: "",
   });
 
   const [editId, setEditId] = useState(null);
   const [search, setSearch] = useState("");
 
-  const simpanJadwal = () => {
+  const simpanPengumuman = () => {
     if (
-      form.kelas === "" ||
-      form.pengajar === "" ||
-      form.hari === "" ||
-      form.jam === "" ||
-      form.ruangan === ""
+      form.judul === "" ||
+      form.isi === "" ||
+      form.tanggal === ""
     ) {
-      alert("Semua data formulir jadwal wajib diisi!");
+      alert("Semua data wajib diisi!");
       return;
     }
 
     let dataTerbaru = [];
 
     if (editId) {
-      // 1. Kasus Edit Jadwal
-      dataTerbaru = jadwal.map((item) =>
+      // 1. Kasus Edit Pengumuman
+      dataTerbaru = pengumuman.map((item) =>
         item.id === editId ? { ...item, ...form } : item
       );
-      setJadwal(dataTerbaru);
-      localStorage.setItem("data_jadwal", JSON.stringify(dataTerbaru));
-      alert("Jadwal perkuliahan berhasil diperbarui");
+      setPengumuman(dataTerbaru);
+      localStorage.setItem("data_pengumuman", JSON.stringify(dataTerbaru));
+      alert("Pengumuman berhasil diperbarui");
     } else {
-      // 2. Kasus Tambah Jadwal Baru
+      // 2. Kasus Tambah Pengumuman Baru
       dataTerbaru = [
-        ...jadwal,
+        ...pengumuman,
         {
           id: Date.now(),
           ...form,
         },
       ];
-      setJadwal(dataTerbaru);
-      localStorage.setItem("data_jadwal", JSON.stringify(dataTerbaru));
+      setPengumuman(dataTerbaru);
+      localStorage.setItem("data_pengumuman", JSON.stringify(dataTerbaru));
 
       // Membuat log input aktivitas baru untuk dashboard
       const logLama = JSON.parse(localStorage.getItem("log_aktivitas")) || [];
@@ -74,48 +70,45 @@ function Jadwal() {
         {
           id: Date.now(),
           tanggal: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }),
-          judul: "Tambah Jadwal Baru",
-          deskripsi: `Jadwal baru untuk ${form.kelas} oleh ${form.pengajar} telah ditambahkan.`
+          judul: "Tambah Pengumuman",
+          deskripsi: `Pengumuman baru "${form.judul}" telah diterbitkan.`
         },
         ...logLama
       ];
       localStorage.setItem("log_aktivitas", JSON.stringify(logBaru.slice(0, 5)));
 
-      alert("Jadwal perkuliahan baru berhasil ditambahkan");
+      alert("Pengumuman berhasil ditambahkan");
     }
 
     resetForm();
   };
 
-  const editJadwal = (item) => {
+  const editPengumuman = (item) => {
     setForm(item);
     setEditId(item.id);
   };
 
-  const hapusJadwal = (id) => {
-    if (window.confirm("Yakin ingin menghapus jadwal ini?")) {
-      const dataTerbaru = jadwal.filter((item) => item.id !== id);
-      setJadwal(dataTerbaru);
-      localStorage.setItem("data_jadwal", JSON.stringify(dataTerbaru));
+  const hapusPengumuman = (id) => {
+    if (window.confirm("Yakin ingin menghapus pengumuman?")) {
+      const dataTerbaru = pengumuman.filter((item) => item.id !== id);
+      setPengumuman(dataTerbaru);
+      localStorage.setItem("data_pengumuman", JSON.stringify(dataTerbaru));
     }
   };
 
   const resetForm = () => {
     setForm({
-      kelas: "",
-      pengajar: "",
-      hari: "",
-      jam: "",
-      ruangan: "",
+      judul: "",
+      isi: "",
+      tanggal: "",
     });
     setEditId(null);
   };
 
-  const dataFilter = jadwal.filter(
+  const dataFilter = pengumuman.filter(
     (item) =>
-      item.kelas.toLowerCase().includes(search.toLowerCase()) ||
-      item.pengajar.toLowerCase().includes(search.toLowerCase()) ||
-      item.ruangan.toLowerCase().includes(search.toLowerCase())
+      item.judul.toLowerCase().includes(search.toLowerCase()) ||
+      item.isi.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -151,6 +144,7 @@ function Jadwal() {
           <strong style={{ color: "#fff", fontSize: "14px" }}>👤 ADMIN</strong>
         </div>
 
+        {/* Menu Navigasi Sidebar */}
         <nav style={{ display: "flex", flexDirection: "column", gap: "8px", flexGrow: 1 }}>
           <Link to="/admin" style={sidebarLink}>
             🏠 Dashboard
@@ -161,17 +155,18 @@ function Jadwal() {
           <Link to="/admin/verifikasi" style={sidebarLink}>
             ✅ Verifikasi Pendaftaran
           </Link>
-          <Link to="/admin/jadwal" style={sidebarLinkActive}>
+          <Link to="/admin/jadwal" style={sidebarLink}>
             📅 Kelola Jadwal
           </Link>
           <Link to="/admin/pengajar" style={sidebarLink}>
             👨‍🏫 Kelola Data Pengajar
           </Link>
-          <Link to="/admin/pengumuman" style={sidebarLink}>
+          <Link to="/admin/pengumuman" style={sidebarLinkActive}>
             📢 Kelola Pengumuman
           </Link>
         </nav>
 
+        {/* Tombol Logout */}
         <button onClick={handleLogout} style={logoutButtonStyle}>
           🚪 Keluar Sistem
         </button>
@@ -183,119 +178,83 @@ function Jadwal() {
         {/* Header Halaman */}
         <div style={{ marginBottom: "25px" }}>
           <h1 style={{ color: "#064e3b", margin: "0 0 5px 0", fontSize: "28px", fontWeight: "bold" }}>
-            📅 Kelola Jadwal Perkuliahan BTA
+            📢 Kelola Pengumuman SIM BTA
           </h1>
           <p style={{ color: "#64748b", margin: 0, fontSize: "14px" }}>
-            Atur dan sinkronisasikan waktu perkuliahan, pengajar pembimbing, serta ruangan kelas BTA.
+            Buat, edit, dan bagikan informasi akademis penting ke seluruh sivitas akademika Universitas Nurul Huda.
           </p>
         </div>
 
-        {/* Card Panel Formulir */}
+        {/* Card Panel Formulir & Tabel */}
         <div
           style={{
             background: "white",
             padding: "25px",
             borderRadius: "15px",
-            boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)",
+            boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03)",
             border: "1px solid #e2e8f0",
-            marginBottom: "25px"
           }}
         >
           <h3 style={{ color: "#064e3b", marginTop: 0, marginBottom: "15px", fontWeight: "bold" }}>
-            {editId ? "🔄 Edit Detail Jadwal" : "✨ Tambah Jadwal Kelas Baru"}
+            {editId ? "🔄 Edit Informasi Pengumuman" : "✨ Tambah Pengumuman Baru"}
           </h3>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px" }}>
-            <input
-              type="text"
-              placeholder="Nama Kelas (Contoh: Kelas A)"
-              value={form.kelas}
-              onChange={(e) => setForm({ ...form, kelas: e.target.value })}
-              style={inputStyle}
-            />
-            <input
-              type="text"
-              placeholder="Nama Pengajar / Ustadz"
-              value={form.pengajar}
-              onChange={(e) => setForm({ ...form, pengajar: e.target.value })}
-              style={inputStyle}
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Judul Pengumuman"
+            value={form.judul}
+            onChange={(e) => setForm({ ...form, judul: e.target.value })}
+            style={inputStyle}
+          />
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "15px" }}>
-            <select
-              value={form.hari}
-              onChange={(e) => setForm({ ...form, hari: e.target.value })}
-              style={selectStyle}
-            >
-              <option value="">-- Pilih Hari --</option>
-              <option value="Senin">Senin</option>
-              <option value="Selasa">Selasa</option>
-              <option value="Rabu">Rabu</option>
-              <option value="Kamis">Kamis</option>
-              <option value="Jumat">Jumat</option>
-              <option value="Sabtu">Sabtu</option>
-            </select>
-            
-            <input
-              type="text"
-              placeholder="Jam (Contoh: 08:00 - 10:00)"
-              value={form.jam}
-              onChange={(e) => setForm({ ...form, jam: e.target.value })}
-              style={inputStyle}
-            />
+          <textarea
+            rows="4"
+            placeholder="Isi Informasi Pengumuman..."
+            value={form.isi}
+            onChange={(e) => setForm({ ...form, isi: e.target.value })}
+            style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
+          />
 
-            <input
-              type="text"
-              placeholder="Ruangan (Contoh: Gedung A.1)"
-              value={form.ruangan}
-              onChange={(e) => setForm({ ...form, ruangan: e.target.value })}
-              style={inputStyle}
-            />
-          </div>
+          <input
+            type="date"
+            value={form.tanggal}
+            onChange={(e) => setForm({ ...form, tanggal: e.target.value })}
+            style={inputStyle}
+          />
 
-          <div style={{ marginTop: "10px" }}>
-            <button onClick={simpanJadwal} style={btnHijau}>
-              {editId ? "Update Jadwal" : "Simpan Jadwal"}
+          <div style={{ marginBottom: "20px" }}>
+            <button onClick={simpanPengumuman} style={btnHijau}>
+              {editId ? "Update Pengumuman" : "Tambah Pengumuman"}
             </button>
             <button onClick={resetForm} style={btnKuning}>
-              Reset
+              Reset Form
             </button>
           </div>
-        </div>
 
-        {/* Card Tabel Data */}
-        <div
-          style={{
-            background: "white",
-            padding: "25px",
-            borderRadius: "15px",
-            boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)",
-            border: "1px solid #e2e8f0",
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px", flexWrap: "wrap", gap: "10px" }}>
-            <h3 style={{ color: "#064e3b", margin: 0, fontWeight: "bold", flexGrow: 1 }}>
-              📋 Daftar Slot Jadwal Aktif
+          <hr style={{ margin: "30px 0", border: "0", borderTop: "1px solid #e2e8f0" }} />
+
+          {/* Kolom Pencarian */}
+          <div style={{ marginBottom: "20px" }}>
+            <h3 style={{ color: "#064e3b", margin: "0 0 10px 0", fontWeight: "bold" }}>
+              📋 Arsip Informasi Pengumuman
             </h3>
             <input
               type="text"
-              placeholder="🔍 Cari Kelas / Pengajar / Ruangan..."
+              placeholder="🔍 Cari Pengumuman..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{ ...inputStyle, width: "300px", marginBottom: 0 }}
+              style={inputStyle}
             />
           </div>
 
+          {/* Tabel Data */}
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead style={{ backgroundColor: "#064e3b", color: "white" }}>
               <tr>
                 <th style={thStyle}>No</th>
-                <th style={thStyle}>Kelas</th>
-                <th style={thStyle}>Dosen / Pengajar</th>
-                <th style={thStyle}>Hari</th>
-                <th style={thStyle}>Waktu</th>
-                <th style={thStyle}>Ruangan</th>
+                <th style={thStyle}>Judul</th>
+                <th style={thStyle}>Isi</th>
+                <th style={thStyle}>Tanggal</th>
                 <th style={thStyle}>Aksi</th>
               </tr>
             </thead>
@@ -303,16 +262,14 @@ function Jadwal() {
               {dataFilter.map((item, index) => (
                 <tr key={item.id} style={{ borderBottom: "1px solid #e2e8f0" }}>
                   <td style={tdStyle}>{index + 1}</td>
-                  <td style={{ ...tdStyle, fontWeight: "bold" }}>{item.kelas}</td>
-                  <td style={{ ...tdStyle, textAlign: "left" }}>{item.pengajar}</td>
-                  <td style={tdStyle}>{item.hari}</td>
-                  <td style={tdStyle}>{item.jam}</td>
-                  <td style={tdStyle}>{item.ruangan}</td>
+                  <td style={{ ...tdStyle, fontWeight: "600", textAlign: "left" }}>{item.judul}</td>
+                  <td style={{ ...tdStyle, textAlign: "left", maxWidth: "400px" }}>{item.isi}</td>
+                  <td style={tdStyle}>{item.tanggal}</td>
                   <td style={tdStyle}>
-                    <button style={btnBiru} onClick={() => editJadwal(item)}>
+                    <button style={btnBiru} onClick={() => editPengumuman(item)}>
                       Edit
                     </button>
-                    <button style={btnMerah} onClick={() => hapusJadwal(item.id)}>
+                    <button style={btnMerah} onClick={() => hapusPengumuman(item.id)}>
                       Hapus
                     </button>
                   </td>
@@ -321,8 +278,8 @@ function Jadwal() {
 
               {dataFilter.length === 0 && (
                 <tr>
-                  <td colSpan="7" style={{ ...tdStyle, padding: "20px", color: "#64748b" }}>
-                    Tidak ada jadwal kuliah yang ditemukan.
+                  <td colSpan="5" style={{ ...tdStyle, padding: "20px", color: "#64748b" }}>
+                    Belum ada pengumuman yang sesuai kata kunci.
                   </td>
                 </tr>
               )}
@@ -374,26 +331,20 @@ const inputStyle = {
   width: "100%",
   padding: "12px",
   marginBottom: "15px",
-  border: "1px solid #cbd5e1",
+  border: "1px solid #ccc",
   borderRadius: "8px",
   fontSize: "14px",
   boxSizing: "border-box",
 };
 
-const selectStyle = {
-  ...inputStyle,
-  backgroundColor: "white",
-  cursor: "pointer"
-};
-
 const thStyle = {
   padding: "12px",
-  border: "1px solid #cbd5e1",
+  border: "1px solid #ddd",
 };
 
 const tdStyle = {
   padding: "10px",
-  border: "1px solid #e2e8f0",
+  border: "1px solid #ddd",
   textAlign: "center",
 };
 
@@ -439,4 +390,4 @@ const btnMerah = {
   fontWeight: "bold",
 };
 
-export default Jadwal;
+export default Pengumuman;
